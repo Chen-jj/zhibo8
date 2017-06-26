@@ -14,6 +14,20 @@ function crawler() {
 		return cheerio.load(body)
 	})
 	.then($ => {
+		let box = $('.schedule_container .box')
+		box.each((i, el) => {
+			let day = $('.titlebar h2', el).attr('title'),
+				list = $('.content li', el)
+
+			list.each((j, elem) => {
+				let textnode = $(elem).contents().filter((i, el) => el.nodeType === 3).eq(0).text().trim()
+				$(elem).attr('data-matchTime', `${day} ${textnode}`)
+				// console.log($(elem).attr('data-matchTime'));
+			})
+		})
+		return $
+	})
+	.then($ => {
 		let list = $('.schedule_container .box .content li')
 		.filter((i, el) => {
 			// 过滤非重要赛事
@@ -55,7 +69,7 @@ function crawler() {
 
 		list.each((i, el) => {
 			matches.push({
-				time:    $(el).attr('data-time'),
+				time:    $(el).attr('data-matchTime'),
 				against: $('b', el).text(),
 				live:    $('a', el).eq(0).text()
 			})
