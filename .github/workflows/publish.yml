@@ -60,7 +60,7 @@ jobs:
         id: tag_check
         shell: bash -ex {0}
         run: |
-          if [ '${{ github.event_name }}' == 'push' && -z "${{ env.disttag }}" ] ; then
+          if [ '${{ github.event_name }}' == 'push' ] && [ -z "${{ env.disttag }}" ] ; then
             echo "Publish by pushing must provide parameter named tag, just like: chore(release): publish 1.0 --tag=beta"
             exit 1
           fi
