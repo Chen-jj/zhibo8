@@ -31,12 +31,18 @@ jobs:
 
 
       - name: Get dist tag
-        if: ${{ github.event_name == 'push' }}
+        if: startsWith( env.commitmsg , 'chore(release):' ) && github.event_name == 'push' && contains( env.commitmsg , '[--type]' )
         run: |
-          echo $commitmsg | grep -oP "\-\-tag=(\w+)"
+          TEMP=`echo $commitmsg | grep -oP "\-\-tag=(\w+)"`
+          echo $TEMP
+          DIST_TAG=`echo ${TEMP:6}`
+          echo $DIST_TAG
+          echo "disttag=${DIST_TAG}" >> $GITHUB_ENV
+
           
           
       - name: Show dist tag
+        if: startsWith( env.commitmsg , 'chore(release):' ) && github.event_name == 'push' && contains( env.commitmsg , '[--type]' )
         run : echo "$disttag"
 
 
