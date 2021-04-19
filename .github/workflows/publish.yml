@@ -60,9 +60,9 @@ jobs:
         if: startsWith( env.commitmsg , 'chore(release):' )
         run: |
           echo "name: ${{github.event_name}}"
-          if [ ${{ github.event_name == 'pull_request' }} ] ; then
+          if [ ${{ github.event_name }} == 'pull_request' ] ; then
             echo "yarn lerna publish from-package --yes"
-          elif [ ${{ github.event_name == 'push' }} ] ; then
+          elif [ ${{ github.event_name }} == 'push' ] ; then
             echo "yarn lerna publish from-package --dist-tag ${{ env.disttag }} --yes"
           fi
 
