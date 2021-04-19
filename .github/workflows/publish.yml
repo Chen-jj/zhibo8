@@ -33,7 +33,7 @@ jobs:
       - name: Get dist tag
         if: ${{ github.event_name == 'push' }}
         run: |
-          TEMP=`echo $commitmsg | grep -oP "\-\-tag=(\w+)"`
+          echo $commitmsg | grep -oP "\-\-tag=(\w+)"
           
           
       - name: Show dist tag
