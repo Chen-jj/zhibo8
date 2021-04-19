@@ -65,7 +65,7 @@ jobs:
             if [ '${{ env.disttag }}' ] ; then
               echo "yarn lerna publish from-package --dist-tag ${{ env.disttag }} --yes"
             else
-              echo "Publish by pushing must provide parameter named tag, just like: chore(release): publish 1.0 --tag=beta"
+              echo "\[Error\] Publish by pushing must provide parameter named tag, just like: chore(release): publish 1.0 --tag=beta"
               exit 1
             fi
           fi
