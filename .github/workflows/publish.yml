@@ -35,9 +35,7 @@ jobs:
         if: startsWith( env.commitmsg , 'chore(release):' ) && github.event_name == 'push' && contains( env.commitmsg , '--tag=' )
         run: |
           TEMP=`echo $commitmsg | grep -oP "\-\-tag=(\w+)"`
-          echo $TEMP
           DIST_TAG=`echo ${TEMP:6}`
-          echo $DIST_TAG
           echo "disttag=${DIST_TAG}" >> $GITHUB_ENV
 
           
