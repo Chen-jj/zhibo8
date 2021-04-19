@@ -34,10 +34,8 @@ jobs:
         if: ${{ github.event_name == 'push' }}
         run: |
           TEMP=`echo $commitmsg | grep -oP "\-\-tag=(\w+)"`
-          echo $TEMP
-          DIST_TAG=`${x:6}`
-          echo $DIST_TAG
-          echo "disttag=${DIST_TAG}" >> $GITHUB_ENV
+          echo "$TEMP"
+          
       - name: Show dist tag
         run : echo "$disttag"
 
