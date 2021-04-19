@@ -40,6 +40,11 @@ jobs:
       - name: Show dist tag
         if: startsWith( env.commitmsg , 'chore(release):' ) && github.event_name == 'push' && contains( env.commitmsg , '--tag=' )
         run : echo "$disttag"
+      - name: Check dist tag
+        if: github.event_name == 'push' && !env.disttag
+        run: |
+          echo "Publish by pushing must provide parameter named tag, just like: chore(release): publish 1.0 --tag=beta"
+          exit 1
 
 
       - name: Setup Node ${{ matrix.node_version }}
@@ -60,12 +65,6 @@ jobs:
         id: tag_check
         shell: bash -ex {0}
         run: |
-          if [ '${{ github.event_name }}' == 'push' ] && [ -z "${{ env.disttag }}" ] ; then
-            echo "Publish by pushing must provide parameter named tag, just like: chore(release): publish 1.0 --tag=beta"
-            exit 1
-          fi
-          
-
           GET_API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/git/ref/tags/v${CURRENT_VERSION}"
           http_status_code=$(curl -LI $GET_API_URL -o /dev/null -w '%{http_code}\n' -s \
             -H "Authorization: token ${GITHUB_TOKEN}")
