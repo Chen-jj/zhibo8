@@ -30,6 +30,7 @@ jobs:
         run : echo "$commitmsg"
 
 
+
       - name: Get dist tag
         if: startsWith( env.commitmsg , 'chore(release):' ) && github.event_name == 'push' && contains( env.commitmsg , '[--type]' )
         run: |
