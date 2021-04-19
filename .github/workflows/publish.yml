@@ -3,7 +3,7 @@ on:
   # When Release Pull Request is merged
   push:
     branches:
-      - master
+      - *
   pull_request:
     branches:
       - next
@@ -26,11 +26,22 @@ jobs:
         run: |
           COMMIT_MESSAGE=$(git log --format=%s -n 1)
           echo "commitmsg=${COMMIT_MESSAGE}" >> $GITHUB_ENV
-      - name: Check commit message
-        if: ${{ !startsWith( env.commitmsg , 'chore(release):' ) }}
-        run: exit 0
       - name: Show commit message
         run : echo "$commitmsg"
+
+
+      - name: Get dist tag
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          TEMP=`echo $commitmsg | grep -oP "\-\-tag=(\w+)"`
+          echo $TEMP
+          DIST_TAG=`${x:6}`
+          echo $DIST_TAG
+          echo "disttag=${DIST_TAG}" >> $GITHUB_ENV
+      - name: Show dist tag
+        run : echo "$disttag"
+
+
       - name: Setup Node ${{ matrix.node_version }}
         uses: actions/setup-node@v1
         with:
