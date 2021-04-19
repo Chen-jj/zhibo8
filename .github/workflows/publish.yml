@@ -55,9 +55,23 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-
-      - name: Publish
+      - name: Tag Check
         if: startsWith( env.commitmsg , 'chore(release):' )
+        id: tag_check
+        shell: bash -ex {0}
+        run: |
+          GET_API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/git/ref/tags/v${CURRENT_VERSION}"
+          http_status_code=$(curl -LI $GET_API_URL -o /dev/null -w '%{http_code}\n' -s \
+            -H "Authorization: token ${GITHUB_TOKEN}")
+          if [ "$http_status_code" -ne "404" ] ; then
+            echo "::set-output name=exists_tag::true"
+          else
+            echo "::set-output name=exists_tag::false"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish
+        if: startsWith( env.commitmsg , 'chore(release):' ) && steps.tag_check.outputs.exists_tag == 'false'
         run: |
           if [ '${{ github.event_name }}' == 'pull_request' ] ; then
             echo "yarn lerna publish from-package --yes"
@@ -65,7 +79,7 @@ jobs:
             if [ '${{ env.disttag }}' ] ; then
               echo "yarn lerna publish from-package --dist-tag ${{ env.disttag }} --yes"
             else
-              echo "\[Error\] Publish by pushing must provide parameter named tag, just like: chore(release): publish 1.0 --tag=beta"
+              echo "Publish by pushing must provide parameter named tag, just like: chore(release): publish 1.0 --tag=beta"
               exit 1
             fi
           fi
