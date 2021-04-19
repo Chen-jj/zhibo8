@@ -28,7 +28,7 @@ jobs:
           echo "commitmsg=${COMMIT_MESSAGE}" >> $GITHUB_ENV
       - name: Check commit message
         if: ${{ !startsWith( env.commitmsg , 'chore(release):' ) }}
-        run: exit 1
+        run: exit 0
       - name: Show commit message
         run : echo "$commitmsg"
       - name: Setup Node ${{ matrix.node_version }}
