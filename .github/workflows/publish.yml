@@ -3,7 +3,7 @@ on:
   # When Release Pull Request is merged
   push:
     branches:
-      - *
+      - '**'
   pull_request:
     branches:
       - next
