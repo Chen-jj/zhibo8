@@ -41,7 +41,7 @@ jobs:
         if: startsWith( env.commitmsg , 'chore(release):' ) && github.event_name == 'push' && contains( env.commitmsg , '--tag=' )
         run : echo "$disttag"
       - name: Check dist tag
-        if: github.event_name == 'push' && !env.disttag
+        if: startsWith( env.commitmsg , 'chore(release):' ) && github.event_name == 'push' && !env.disttag
         run: |
           echo "Publish by pushing must provide parameter named tag, just like: chore(release): publish 1.0 --tag=beta"
           exit 1
