@@ -64,6 +64,7 @@ jobs:
             echo "Publish by pushing must provide parameter named tag, just like: chore(release): publish 1.0 --tag=beta"
             exit 1
           fi
+          
 
           GET_API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/git/ref/tags/v${CURRENT_VERSION}"
           http_status_code=$(curl -LI $GET_API_URL -o /dev/null -w '%{http_code}\n' -s \
