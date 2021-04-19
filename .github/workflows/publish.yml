@@ -26,7 +26,6 @@ jobs:
         run: |
           COMMIT_MESSAGE=$(git log --format=%s -n 1)
           echo "commitmsg=${COMMIT_MESSAGE}" >> $GITHUB_ENV
-          echo "disttag=next" >> $GITHUB_ENV
       - name: Show commit message
         run : echo "$commitmsg"
 
