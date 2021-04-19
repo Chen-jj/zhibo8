@@ -35,7 +35,7 @@ jobs:
         run: |
           TEMP=`echo $commitmsg | grep -oP "\-\-tag=(\w+)"`
           echo $TEMP
-          
+          exit 0
           
       - name: Show dist tag
         run : echo "$disttag"
