@@ -26,13 +26,14 @@ jobs:
         run: |
           COMMIT_MESSAGE=$(git log --format=%s -n 1)
           echo "commitmsg=${COMMIT_MESSAGE}" >> $GITHUB_ENV
+          echo "disttag=next" >> $GITHUB_ENV
       - name: Show commit message
         run : echo "$commitmsg"
 
 
 
       - name: Get dist tag
-        if: startsWith( env.commitmsg , 'chore(release):' ) && github.event_name == 'push' && contains( env.commitmsg , '--type=' )
+        if: startsWith( env.commitmsg , 'chore(release):' ) && github.event_name == 'push'
         run: |
           TEMP=`echo $commitmsg | grep -oP "\-\-tag=(\w+)"`
           echo $TEMP
@@ -42,7 +43,7 @@ jobs:
 
           
       - name: Show dist tag
-        if: startsWith( env.commitmsg , 'chore(release):' ) && github.event_name == 'push' && contains( env.commitmsg , '--type=' )
+        if: contains( env.commitmsg , '--type=' )
         run : echo "$disttag"
 
 
